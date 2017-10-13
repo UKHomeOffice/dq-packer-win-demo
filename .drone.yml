@@ -1,0 +1,9 @@
+pipeline:
+
+  packer:
+    image: chrisns/packer-ansible:latest
+    environment:
+#      - PACKER_LOG=1
+    commands:
+      - export HOME=/home/packer
+      - packer build packer.json
