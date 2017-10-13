@@ -1,9 +1,25 @@
 pipeline:
 
-  packer:
+  validate:
     image: chrisns/packer-ansible:latest
     environment:
-#      - PACKER_LOG=1
+    commands:
+      - export HOME=/home/packer
+      - packer validate packer.json
+
+  inspect:
+    image: chrisns/packer-ansible:latest
+    environment:
+    commands:
+      - export HOME=/home/packer
+      - packer inspect packer.json
+
+  build:
+    image: chrisns/packer-ansible:latest
+    environment:
     commands:
       - export HOME=/home/packer
       - packer build packer.json
+    when:
+      event: push
+      branch: master
