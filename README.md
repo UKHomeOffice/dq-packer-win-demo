@@ -1,6 +1,6 @@
 # dq packer demo
 
-Simple proof of concept packer image that uses a `ubuntu` base image to host a `nginx` webservice with some `ansible` magic.
+Simple proof of concept packer image that uses a `windows 2012 R2` base image to host a `iis` webservice with some `ansible` magic.
 
 This demo runs in AWS in the HODAC-DACC-DQ where it makes an ami, though can be forked and run with different aws credentials if desired.
 

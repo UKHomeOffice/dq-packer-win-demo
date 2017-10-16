@@ -12,23 +12,39 @@
       "source_ami_filter": {
         "filters": {
           "virtualization-type": "hvm",
-          "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+          "name": "Windows_Server-2012-R2_RTM-English-64Bit-Base-*",
           "root-device-type": "ebs"
         },
-        "owners": [
-          "099720109477"
-        ],
         "most_recent": true
       },
       "instance_type": "t2.micro",
       "ssh_username": "ubuntu",
-      "ami_name": "dq-packer-demo {{timestamp}}"
+      "communicator": "winrm",
+      "winrm_timeout": "4h",
+      "winrm_port": 5985,
+      "winrm_username": "Administrator",
+      "ami_name": "dq-packer-win-demo {{timestamp}}"
     }
   ],
   "provisioners": [
     {
+      "type": "powershell",
+      "inline": [
+        "mkdir C:\\tmp",
+        "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1' -OutFile C:\\tmp\\tmp.ps1",
+        "powershell C:\\tmp\\tmp.ps1",
+        "rm C:\\tmp\\tmp.ps1"
+      ]
+    },
+    {
       "type": "ansible",
-      "playbook_file": "./playbook.yml"
+      "playbook_file": "./playbook.yml",
+      "extra_arguments": [
+        "--connection",
+        "packer",
+        "--extra-vars",
+        "ansible_shell_type=powershell ansible_shell_executable=None"
+      ]
     }
   ]
 }
